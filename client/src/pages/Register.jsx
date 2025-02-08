@@ -10,7 +10,7 @@ const Register = () => {
   //form handler
   const onfinishHandler=async (values)=>{
     try{
-    const res=await axios.post("http://localhost:3000/api/v1/user/register",values)   
+    const res=await axios.post("http://localhost:8080/api/v1/user/register",values)   
     if(res.data.success){
       message.success("Register successfully!")
       navigate("/login")
@@ -30,7 +30,7 @@ const Register = () => {
 <Form.Item label="Name" name="name">
   <Input type="text" required/>
 </Form.Item>
-<Form.Item label="Email" name="Email">
+<Form.Item label="Email" name="email">
   <Input type="email" required/>
 </Form.Item>
 <Form.Item label="Password" name="password">
