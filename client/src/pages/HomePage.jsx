@@ -1,12 +1,32 @@
-import React from 'react'
+import {useEffect} from 'react'
+import axios from 'axios'
+import Layout from '../components/Layout'
 
 
 const HomePage = () => {
-  return (
-    <div>
-      <h1>Home Page</h1>
-    </div>
-  )
+  //login user data
+const getUserData=async()=>{
+  try{
+    const res=await axios.post("http://localhost:8080/api/v1/user/getUserData",{},{
+      headers:{
+        Authorization:"Bearer "+localStorage.getItem("token")
+      }
+    })
+  }catch(error){
+    console.log(error)
+  }
+}
+
+useEffect(()=>{
+  getUserData()
+}
+,[])
+return (
+  <Layout>
+    <h1>Home Page</h1>
+    </Layout>
+)
+
 }
 
 export default HomePage
