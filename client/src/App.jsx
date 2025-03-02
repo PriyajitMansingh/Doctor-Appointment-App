@@ -3,7 +3,7 @@ import HomePage from "./pages/HomePage"
 import Login from "./pages/Login"
 import Register from "./pages/Register" 
 import  {useSelector}  from "react-redux"
-import Spinner from "./components/Spinner"  
+import Spinner from "./components/Spinner.jsx"
 import PublicRoute from "./components/PublicRoute"
 import ProtectedRoute from "./components/ProtectedRoute"
 function App() {

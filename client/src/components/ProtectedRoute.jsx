@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideLoading, showLoading } from '../redux/features/alertSlice';
 import axios from 'axios';
-import { token } from 'morgan';
+// import { token } from 'morgan';
 import { setUser } from '../redux/features/userSlice';
 
 export default function ProtectedRoute({ children }) {
@@ -14,7 +14,7 @@ export default function ProtectedRoute({ children }) {
     const getUser=async()=>{
         try{
             dispatch(showLoading())
-            const res=await axios.post("/api/v1/user/getUserData",{token:localStorage.getItem('token')},{
+            const res=await axios.post("http:localhost:8080/api/v1/user/getUserData",{token:localStorage.getItem('token')},{
                 headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}
             })
             dispatch(hideLoading())
@@ -33,7 +33,7 @@ export default function ProtectedRoute({ children }) {
         if(!user){
             getUser()
         }
-    },[user])
+    },[user,getUser])
 
     if (localStorage.getItem('token')) {
         return children
