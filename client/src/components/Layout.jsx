@@ -19,12 +19,12 @@ const Layout = ({children}) => {
                         {SidebarMenu.map(menu=>{
                             const isActive=location.pathname===menu.path
                             return(
-                                <>
-                                <div className={`menu-item ${isActive && "active"}`}>
+                                
+                                <div key={menu.path} className={`menu-item ${isActive && "active"}`}>
                                     <i className={menu.icon}></i>
                                     <Link to={menu.path}>{menu.name}</Link>
                                 </div>
-                                </>
+                                
                             )
                         })}
                     </div>
@@ -33,7 +33,7 @@ const Layout = ({children}) => {
                     <div className="header">
                     <div className="container">
                     <i className="fa-solid fa-bell"></i>
-                    <Link to="/profile">{user.name}</Link>
+                    <Link to="/profile">{user?.name}</Link>
                     </div>
                     </div>
                     <div className="body">{children}</div>
