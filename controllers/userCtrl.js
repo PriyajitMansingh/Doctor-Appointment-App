@@ -1,6 +1,7 @@
 const userModel=require("../models/userModels")
 const bcrypt=require("bcryptjs")
 const jwt=require("jsonwebtoken")
+const doctorModel=require("../models/doctorModel")
 
 //register callback
 const registerController=async(req,res)=>{
@@ -44,14 +45,13 @@ const loginController=async(req,res)=>{
 
 const authController=async(req,res)=>{
 try{
-    const user=await userModel.findOne({_id:req.body.userId})
+    const user=await userModel.findById({_id:req.body.userId})
+    user.password=undefined
     if(!user){
         return res.status(200).send({message:"user not found",success:false})
     }else{
-        res.status(200).send({success:true,data:{
-            name:user.name,
-            email:user.email,
-        }})
+        res.status(200).send({success:true,
+            data:user})
     }
 }catch(error){
     console.log(error)
@@ -61,4 +61,35 @@ try{
 }
 }
 
-module.exports = {loginController,registerController,authController}
+//Apply Doctor CTRL
+const applyDoctorController=async(req,res)=>{
+    try{
+        const newDoctor=await doctorModel({...req.body,status:"pending"})
+        await newDoctor.save()
+        const adminUser=await userModel.findOne({isAdmin:true})
+        const notification=adminUser.notification
+        notification?.push({
+            type:"apply-doctor-request",
+            message:`${newDoctor.firstName} ${newDoctor.lastName} Has Applied For A Doctor Account`,
+            data:{
+                doctorId:newDoctor._id,
+                name:newDoctor.firstName + " " + newDoctor.lastName,
+                onclickPath:"/admin/doctors"
+            }
+        })
+        await userModel.findByIdAndUpdate(adminUser._id,{notification})
+        res.status(201).send({
+            success:true,
+            message:"Doctor Account Applied Successully"
+        })
+    } catch(error){
+        console.log(error)
+        res.status(500).send({
+            success:false,
+            error,
+            message:"Error While Applying For Doctor"
+        })
+    }
+}
+
+module.exports = {loginController,registerController,authController,applyDoctorController}

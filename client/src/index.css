@@ -12,3 +12,7 @@
     z-index: 999;
     background-color: rgba(0, 0, 0, 0.17);
 }
+
+.form-btn{
+    width: 250px;
+}
