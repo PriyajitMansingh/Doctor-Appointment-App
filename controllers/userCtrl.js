@@ -64,7 +64,7 @@ try{
 //Apply Doctor CTRL
 const applyDoctorController=async(req,res)=>{
     try{
-        const newDoctor=await doctorModel({...req.body,status:"pending"})
+        const newDoctor=await doctorModel.create({...req.body,status:"pending"})
         await newDoctor.save()
         const adminUser=await userModel.findOne({isAdmin:true})
         const notification=adminUser.notification
