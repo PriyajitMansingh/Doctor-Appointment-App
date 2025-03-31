@@ -101,11 +101,11 @@ const ApplyDoctor = () => {
             </Form.Item>
             </Col>
     
-            {/* <Col xs={24} md={24} lg={8}>
+            <Col xs={24} md={24} lg={8}>
             <Form.Item label="Timings" name="timings" required>
                 <TimePicker.RangePicker format="HH:mm"/>
             </Form.Item>
-            </Col> */}
+            </Col>
             <Col xs={24} md={24} lg={8}></Col>
             <Col xs={24} md={24} lg={8}></Col>
             <button className='btn btn-primary form-btn' type='submit'>Submit</button>
