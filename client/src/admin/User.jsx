@@ -38,8 +38,11 @@ const User = () => {
     dataIndex:"email"
   },
   {
-    title:"Created At",
-    dataIndex:"createdAt"
+    title:"Doctor",
+    dataIndex:"isDoctor",
+    render:(text,record)=>(
+      <span>{record.isDoctor ? "Yes" : "No"}</span>
+    )
   },
   {
     title:"Actions",
@@ -50,11 +53,12 @@ const User = () => {
       </div>
     )
   }
+ 
 ]
   return (
     <div>
       <Layout>
-        <h1>Users List</h1>
+        <h1 className="text-center m-2">Users List</h1>
         <Table columns={columns} dataSource={users}/>
       </Layout>
     </div>

@@ -20,7 +20,7 @@ const getAllUsersController=async(req,res)=>{
 }
 const getAllDoctorsController=async(req,res)=>{
     try{
-        const doctors=await doctorModel.find({})
+        const doctors=await doctorModel.find({}).populate("userId", "phone")
         res.status(200).send({
             success:true,
             messsage:"Doctors Data list",

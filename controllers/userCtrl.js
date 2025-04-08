@@ -2,6 +2,8 @@ const userModel=require("../models/userModels")
 const bcrypt=require("bcryptjs")
 const jwt=require("jsonwebtoken")
 const doctorModel=require("../models/doctorModel")
+const mongoose = require("mongoose");
+
 
 //register callback
 const registerController=async(req,res)=>{
