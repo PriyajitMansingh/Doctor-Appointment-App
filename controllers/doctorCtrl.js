@@ -17,4 +17,22 @@ const getDoctorInfoController=async(req,res)=>{
     }
 }
 
-module.exports={getDoctorInfoController}
+// POST UPDATE PROFILE
+const updateProfileController=async(req,res)=>{
+    try{
+        const doctor=await doctorModel.findOneAndUpdate({userId:req.body.userId},req.body)
+        res.status(200).send({success:true,
+            message:"Doctor Profile Updated Successfully",
+            data:doctor,
+        })
+    }catch(error){
+        console.log(error)
+        res.status(500).send({
+            success:false,
+            message:"Doctor Profile Update issue",
+            error
+        })
+    }
+}
+
+module.exports={getDoctorInfoController,updateProfileController}
