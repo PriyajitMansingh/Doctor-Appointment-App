@@ -36,7 +36,7 @@ const getAllDoctorsController=async(req,res)=>{
     }
 }
 //doctor account status
-const changeAccountStatusController=async(req,res)=>{
+const   changeAccountStatusController=async(req,res)=>{
     try{
         const {doctorId,status}=req.body
         const doctor=await doctorModel.findByIdAndUpdate(doctorId,{status})

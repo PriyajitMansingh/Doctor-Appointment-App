@@ -1,4 +1,4 @@
-import { Layout } from "antd"
+import Layout from "../../components/Layout"
 import { useSelector } from 'react-redux';
 import {useParams} from "react-router-dom"
 import axios from "axios"
