@@ -3,6 +3,7 @@ const bcrypt=require("bcryptjs")
 const jwt=require("jsonwebtoken")
 const doctorModel=require("../models/doctorModel")
 const mongoose = require("mongoose");
+const appointmentModel=require("../models/appointmentModel")
 
 
 //register callback
@@ -142,4 +143,50 @@ const deleteAllNotificationController=async(req,res)=>{
     }
 }
 
-module.exports = {loginController,registerController,authController,applyDoctorController,getAllNotificationController,deleteAllNotificationController}
+//get all doc
+const getAllDoctorsController=async (req,res)=>{
+    try{
+        const doctors=await doctorModel.find({status:"approved"})
+        res.status(200).send({
+            success:true,
+            message:"Doctors List Fetched Successfully",
+            data:doctors
+        })
+    }catch (error){
+        console.log(error)
+        res.status(500).send({
+            success:false,
+            message:"Error While Fethcing Doctor",
+            error
+        })
+    }
+}
+
+//BOOK APPOINTMENT
+const bookeAppointmentController=async (req,res)=>{
+    try{
+        req.body.status="pending"
+        const newAppointment=new appointmentModel(req.body)
+        await newAppointment.save()
+        const user=await userModel.findOne({_id:req.body.doctorInfo.userId})
+        user.notification.push({
+            type:"new-appointment-request",
+            message:`New Appointment Request From ${user.body.userInfo.name}`,
+            onclickPath:"/user/appointments"
+        })
+        await user.save()
+        res.status(200).send({
+            success:true,
+            message:"Appointment Booked Successfully",
+        })
+    } catch(error){
+        console.log(error)
+        res.status(500).send({
+            success:false,
+            message:"Error While Booking Appointment",
+            error
+        })
+    }
+}
+
+module.exports = {loginController,registerController,authController,applyDoctorController,getAllNotificationController,deleteAllNotificationController,getAllDoctorsController,bookeAppointmentController}
