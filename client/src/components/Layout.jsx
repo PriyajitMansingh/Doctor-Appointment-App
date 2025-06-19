@@ -1,86 +1,134 @@
-import "../styles/LayoutStyle.css";
-import { adminMenu, userMenu } from './../Data/data';
-import { Link,useLocation,useNavigate } from 'react-router-dom';
+import styles from "../styles/Layout.module.css";
+import { adminMenu, userMenu } from "./../Data/data";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import {message,Badge} from "antd"
+import { message, Badge } from "antd";
+import { useState } from "react";
 
- 
-const Layout = ({children}) => {
-    const {user}=useSelector(state=>state.user) 
-    const location=useLocation();
-    const navigate=useNavigate()
+const Layout = ({ children }) => {
+  const { user } = useSelector((state) => state.user);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
-    //logout function
-    const handleLogout=()=>{
-        localStorage.clear()
-        message.success("Logout Successfully")
-        navigate("/login")
-    }
-    //=========doctor menu==========
-     const doctorMenu=[
-        {
-            name:"Home",
-            path:"/",
-            icon:"fa-solid fa-house"
-        },
-        {
-            name:"Appointments",
-            path:"/doctor-appointments",
-            icon:"fa-solid fa-list"
-        },
-        {
-            name:"Profile",
-            path:`/doctor/profile/${user?._id}`,
-            icon:"fa-solid fa-user"
-        },
-        ]
-    //=========doctor menu==========
+  const handleLogout = () => {
+    localStorage.clear();
+    message.success("Logout Successfully");
+    navigate("/login");
+  };
 
-    //rendering menu list
-    const SidebarMenu=user?.isAdmin ? adminMenu : user?.isDoctor ? doctorMenu : userMenu
+  const doctorMenu = [
+    { name: "Home", path: "/", icon: "fa-solid fa-house" },
+    {
+      name: "Appointments",
+      path: "/doctor-appointments",
+      icon: "fa-solid fa-list",
+    },
+    {
+      name: "Profile",
+      path: `/doctor/profile/${user?._id}`,
+      icon: "fa-solid fa-user",
+    },
+  ];
+
+  const SidebarMenu = user?.isAdmin
+    ? adminMenu
+    : user?.isDoctor
+    ? doctorMenu
+    : userMenu;
+
+  const renderLinks = () =>
+    SidebarMenu.map((menu) => {
+      const isActive = location.pathname === menu.path;
+      return (
+        <Link
+          key={menu.path}
+          to={menu.path}
+          className={`${styles.navLink} ${isActive ? styles.active : ""}`}
+          onClick={() => setMenuOpen(false)}
+        >
+          <i className={menu.icon}></i>
+          <span>{menu.name}</span>
+        </Link>
+      );
+    });
+
   return (
-    <>
-        <div className="main">
-            <div className="layout">
-                <div className="sidebar">
-                    <div className="logo">
-                        <h6>Doc App</h6>
-                        <hr />
-                    </div>
-                    <div className="menu">
-                        {SidebarMenu.map(menu=>{
-                            const isActive=location.pathname===menu.path
-                            return(
-                                
-                                <div key={menu.path} className={`menu-item ${isActive && "active"}`}>
-                                    <i className={menu.icon}></i>
-                                    <Link to={menu.path}>{menu.name}</Link>
-                                </div>
-                                
-                            )
-                        })}
-                         <div key="logout" className={`menu-item`} onClick={handleLogout}>
-                                    <i className="fa-solid fa-right-from-bracket"></i>
-                                    <Link to={"/login"}>
-                                    Logout</Link>
-                                </div>
-                    </div>
-                </div>
-                <div className="content">
-                    <div className="header">
-                    <div className="header-content" style={{cursor:"pointer"}}>
-                    <Badge count={user && user.notification.length}onClick={()=>{navigate("/notification")}}>
-                    <i className="fa-solid fa-bell"></i>
-                    </Badge>
-                    <Link to="/profile">{user?.name}</Link>
-                    </div>
-                    </div>
-                    <div className="body">{children}</div>
-                </div>
-            </div>
-        </div>
-    </>
-  )
-}
+    <div className={styles.container}>
+      {/* Navbar */}
+      <nav className={styles.navbar}>
+        <div className={styles.navContent}>
+          <Link to="/" className={styles.logo}>
+            Doc App
+          </Link>
 
-export default Layout
+          {/* Desktop Navigation */}
+          <div className={styles.desktopNav}>
+            <div className={styles.navCenter}>{renderLinks()}</div>
+            <div className={styles.navControls}>
+              <Badge
+                count={user?.notification?.length || 0}
+                onClick={() => navigate("/notification")}
+                className={styles.badge}
+              >
+                <i className="fa-solid fa-bell"></i>
+              </Badge>
+              <Link to="/profile" className={styles.avatar}>
+                {user?.name?.charAt(0).toUpperCase()}
+              </Link>
+              <button className={styles.logoutBtn} onClick={handleLogout}>
+                <i className="fa-solid fa-right-from-bracket"></i>
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <div className={styles.mobileControls}>
+            <Badge
+              count={user?.notification?.length || 0}
+              onClick={() => navigate("/notification")}
+              className={styles.badge}
+            >
+              <i className="fa-solid fa-bell"></i>
+            </Badge>
+            <Link to="/profile" className={styles.avatar}>
+              {user?.name?.charAt(0).toUpperCase()}
+            </Link>
+            <button
+              className={styles.menuToggle}
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              <i className={`fa ${menuOpen ? "fa-times" : "fa-bars"}`} />
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      <div
+        className={`${styles.mobileOverlay} ${menuOpen ? styles.show : ""}`}
+        onClick={() => setMenuOpen(false)}
+      />
+
+      {/* Mobile Slide-In Menu */}
+      <div className={`${styles.mobileMenu} ${menuOpen ? styles.show : ""}`}>
+        {renderLinks()}
+        <button
+          className={styles.mobileLogoutBtn}
+          onClick={() => {
+            handleLogout();
+            setMenuOpen(false);
+          }}
+        >
+          <i className="fa-solid fa-right-from-bracket"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+
+      {/* Page Content */}
+      <main className={styles.content}>{children}</main>
+    </div>
+  );
+};
+
+export default Layout;

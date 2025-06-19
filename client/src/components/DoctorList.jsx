@@ -1,5 +1,15 @@
 import { useNavigate } from "react-router-dom";
 
+function formatMongoDate(mongoDateStr) {
+  const date = new Date(mongoDateStr);
+
+  const day = date.getDate();
+  const month = date.toLocaleString("default", { month: "short" }); // Dec
+  const year = date.getFullYear();
+
+  return `${day} ${month} ${year}`;
+}
+
 const DoctorList = ({ doctor }) => {
   const navigate = useNavigate();
   return (
@@ -23,7 +33,8 @@ const DoctorList = ({ doctor }) => {
             <b>Fees Per Consultation</b> {doctor.feesPerConsultation}
           </p>
           <p>
-            <b>Timings</b> {doctor.timings[0]} - {doctor.timings[1]}
+            <b>Timings</b> {formatMongoDate(doctor.timings[0])} -{" "}
+            {formatMongoDate(doctor.timings[1])}
           </p>
         </div>
       </div>
