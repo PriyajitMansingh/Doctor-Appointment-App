@@ -12,6 +12,8 @@ import User from "./admin/User"
 import Doctor from './admin/Doctor';
 import Profile from "./pages/doctor/Profile.jsx"
 import BookingPage from "./pages/BookingPage.jsx"
+import Appointments from "./pages/Appointments.jsx"
+import DoctorAppointments from "./pages/doctor/DoctorAppointments.jsx"
 function App() {
   const {loading}=useSelector(state=>state.alerts)
 return (
@@ -27,6 +29,8 @@ return (
           <Route path="/notification" element={<ProtectedRoute><NotificationPage /></ProtectedRoute>} />
           <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
           <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+          <Route path="/appointments" element={<ProtectedRoute><Appointments /></ProtectedRoute>} />
+          <Route path="/doctor-appointments" element={<ProtectedRoute><DoctorAppointments /></ProtectedRoute>} />
         </Routes>)}
        
       </BrowserRouter>
