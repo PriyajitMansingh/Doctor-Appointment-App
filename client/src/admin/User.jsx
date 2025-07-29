@@ -19,7 +19,6 @@ const User = () => {
       }
     }catch(error){
       console.log(error)
-
     }
   }
 

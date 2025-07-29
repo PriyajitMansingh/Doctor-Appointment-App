@@ -104,7 +104,13 @@ const BookingPage = () => {
              <h4> Dr.{doctors.firstName} {doctors.lastName}</h4>
              <h4>Fees: {doctors.feesPerConsultation}</h4>
               {doctors?.timings?.length >= 2 && (
-  <h4>Timings: {doctors.timings[0]} - {doctors.timings[1]}</h4>
+  // <h4>Timings: {doctors.timings[0]} - {doctors.timings[1]}</h4>
+  <h4>
+  Timings:{" "}
+  {moment(doctors.timings[0]).format("hh:mm A")} -{" "}
+  {moment(doctors.timings[1]).format("hh:mm A")}
+</h4>
+
 )}
 
              <div className="d-flex flex-column w-50">
